@@ -6,6 +6,7 @@ import { RegisterDto, LoginDto, ActivationDto } from './dto/user.dto';
 import { PrismaService } from '../../../prisma/Prisma.service';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
+import { TokenSender } from './utils/sendToken';
 
 interface UserData {
   name: string;
@@ -117,11 +118,50 @@ export class UsersService {
   // Login service
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
-    const user = {
-      email,
-      password,
-    };
-    return user;
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (user && (await this.comparePassword(password, user.password))) {
+      const tokenSender = new TokenSender(this.jwtService, this.configService);
+      return tokenSender.sendToken(user);
+    } else {
+      return {
+        user: null,
+        accesToken: null,
+        refreshToken: null,
+        error: {
+          message: 'Invalid Credentials!',
+        },
+      };
+    }
+  }
+
+  // Check password while login
+  async comparePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, hashedPassword);
+  }
+
+  // check logined user
+  async getLoggerInUser(req: any) {
+    const user = req.user;
+    const refreshToken = req.refreshtoken;
+    const accessToken = req.accesstoken;
+
+    return { user, refreshToken, accessToken };
+  }
+
+  async Logout(req: any) {
+    req.user = null;
+    req.refreshtoken = null;
+    req.accesstoken = null;
+    return { message: 'Logged out successfully!' };
   }
 
   // get all users service
