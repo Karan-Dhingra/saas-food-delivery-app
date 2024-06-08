@@ -1,0 +1,5 @@
+.env
+./env
+
+./clients/user-ui/.env
+./servers/.env
