@@ -2,12 +2,12 @@
 import { Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@apollo/client";
+import { GET_FOODS } from "../../../graphql/actions/get.foods";
+import Loader from "../layout/loader";
 import { format } from "timeago.js";
+import { DELETE_FOOD } from "../../../graphql/actions/delete.food";
 import toast from "react-hot-toast";
 import { Icons } from '@/src/utils/Icons';
-import Loader from '../layout/loader';
-import { GET_FOODS } from '@/src/graphql/actions/get.foods';
-import { DELETE_FOOD } from '@/src/graphql/actions/delete.food';
 
 const FoodData = () => {
   const { data, loading, refetch } = useQuery(GET_FOODS);
@@ -44,7 +44,7 @@ const FoodData = () => {
         return (
           <div className="md:w-[50%] flex justify-center">
             <span
-              className="text-3xl cursor-pointer"
+              className="text-3xl cursor-pointer text-white"
               onClick={() => handleDeleteFood(params.row.id)}
             >
               {Icons.delete}

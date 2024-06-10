@@ -10,6 +10,10 @@ import { PrismaService } from '../../../prisma/Prisma.service';
 import { EmailModule } from './email/email.module';
 import { RestaurantService } from './restaurants.service';
 import { RestaurantResolver } from './restaurants.resolver';
+import { FoodsService } from './foods/foods.service';
+import { FoodsResolver } from './foods/foods.resolver';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryService } from './cloudinary/cloudinary.service';
 
 @Module({
   imports: [
@@ -23,6 +27,7 @@ import { RestaurantResolver } from './restaurants.resolver';
       },
     }),
     EmailModule,
+    CloudinaryModule,
   ],
   controllers: [],
   providers: [
@@ -31,6 +36,9 @@ import { RestaurantResolver } from './restaurants.resolver';
     JwtService,
     PrismaService,
     RestaurantResolver,
+    FoodsService,
+    FoodsResolver,
+    CloudinaryService,
   ],
 })
 export class restaurantModule {}

@@ -25,6 +25,7 @@ export default function RootLayout({
 }) {
   const heads = headers();
   const pathname = heads.get('next-url');
+  console.log(heads);
 
   return (
     <html lang="en">
